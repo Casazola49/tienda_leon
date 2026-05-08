@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 10, "column": 0}, "map": {"version":3,"sources":["file:///root/.openclaw/workspace/leon-store/pages/_app.js"],"sourcesContent":["import { SessionProvider } from 'next-auth/react'\n\nexport default function MyApp({ Component, pageProps }) {\n  return (\n    <SessionProvider session={pageProps.session}>\n      <Component {...pageProps} />\n    </SessionProvider>\n  )\n}"],"names":["MyApp","Component","pageProps","session"],"mappings":";;;;;AAAA;;;AAEe,SAASA,MAAM,EAAEC,SAAS,EAAEC,SAAS,EAAE;IACpD,qBACE,qKAAC,yMAAe;QAACC,SAASD,UAAUC,OAAO;kBACzC,cAAA,qKAACF;YAAW,GAAGC,SAAS;;;;;;;;;;;AAG9B"}}]
+}
