@@ -1,11 +1,18 @@
+import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
 async function main() {
-  const email = 'admin@leon.store'
-  const password = 'admin123'
+  const email = process.env.ADMIN_EMAIL || 'admin@leon.store'
+  const password = process.env.ADMIN_PASSWORD
+
+  if (!password) {
+    console.error('ADMIN_PASSWORD environment variable is required')
+    process.exit(1)
+  }
+
   const hashedPassword = await bcrypt.hash(password, 10)
 
   await prisma.user.upsert({

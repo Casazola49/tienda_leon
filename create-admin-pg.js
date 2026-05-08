@@ -6,16 +6,24 @@ const pool = new Pool({
 });
 
 async function main() {
+  const email = process.env.ADMIN_EMAIL || 'admin@leon.store';
+  const password = process.env.ADMIN_PASSWORD;
+
+  if (!password) {
+    console.error('ADMIN_PASSWORD environment variable is required');
+    process.exit(1);
+  }
+
   const client = await pool.connect();
   try {
     const now = new Date().toISOString();
-    const { rows } = await client.query('SELECT * FROM "User" WHERE email = $1', ['admin@leon.store']);
+    const { rows } = await client.query('SELECT * FROM "User" WHERE email = $1', [email]);
     if (rows.length === 0) {
       const bcrypt = require('bcryptjs');
-      const hashedPassword = await bcrypt.hash('admin123', 10);
+      const hashedPassword = await bcrypt.hash(password, 10);
       await client.query(
         'INSERT INTO "User" (email, "passwordHash", role, "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5)',
-        ['admin@leon.store', hashedPassword, 'ADMIN', now, now]
+        [email, hashedPassword, 'ADMIN', now, now]
       );
       console.log('Admin user created');
     } else {

@@ -6,9 +6,10 @@ const pool = new Pool({
 });
 
 async function main() {
+  const email = process.env.ADMIN_EMAIL || 'admin@leon.store';
   const client = await pool.connect();
   try {
-    const { rows } = await client.query('SELECT id, email, role, "createdAt", "updatedAt" FROM "User" WHERE email = $1', ['admin@leon.store']);
+    const { rows } = await client.query('SELECT id, email, role, "createdAt", "updatedAt" FROM "User" WHERE email = $1', [email]);
     if (rows.length === 0) {
       console.log('ERROR: Admin user not found');
       process.exit(1);
