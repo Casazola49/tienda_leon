@@ -1,10 +1,10 @@
 import NextAuth from 'next-auth';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { PrismaClient } from '../../../node_modules/.prisma/client/client';
+import { PrismaClient } from '@prisma/client';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 
-const prisma = new PrismaClient({ log: [] });
+const prisma = new PrismaClient();
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -35,7 +35,7 @@ export default NextAuth({
         }
 
         return {
-          id: user.id,
+          id: user.id.toString(),
           email: user.email,
           role: user.role,
           // any other fields you want to store in the token
@@ -49,13 +49,13 @@ export default NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.role = user.role;
+        token.role = (user as any).role;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
-        session.user.role = token.role;
+        (session.user as any).role = token.role;
       }
       return session;
     }
